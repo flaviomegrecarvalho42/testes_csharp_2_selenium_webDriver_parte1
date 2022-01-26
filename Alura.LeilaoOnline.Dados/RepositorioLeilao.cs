@@ -1,9 +1,6 @@
 ﻿using Alura.LeilaoOnline.Core;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Alura.LeilaoOnline.WebApp.Dados
 {
@@ -13,10 +10,9 @@ namespace Alura.LeilaoOnline.WebApp.Dados
 
         public override Leilao BuscarPorId(int id)
         {
-            return _ctx.Leiloes
-                .Include(l => l.Lances)
-                .Include(l => l.Seguidores)
-                .FirstOrDefault(l => l.Id == id);
+            return _ctx.Leiloes.Include(l => l.Lances)
+                               .Include(l => l.Seguidores)
+                               .FirstOrDefault(l => l.Id == id);
         }
     }
 }

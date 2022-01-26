@@ -8,10 +8,9 @@ namespace Alura.LeilaoOnline.WebApp.Dados
     {
         public void Configure(EntityTypeBuilder<Interessada> builder)
         {
-            builder.HasData(
-                new Interessada("Fulano de Tal") { Id = 1 },
-                new Interessada("Mariana Mary") { Id = 2 },
-                new Interessada("Sicrana Silva") { Id = 3 } );
+            builder.HasData(new Interessada("Fulano de Tal") { Id = 1 },
+                            new Interessada("Mariana Mary") { Id = 2 },
+                            new Interessada("Sicrana Silva") { Id = 3 });
         }
     }
 }

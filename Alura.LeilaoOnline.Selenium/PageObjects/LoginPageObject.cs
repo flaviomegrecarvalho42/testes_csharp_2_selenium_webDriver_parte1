@@ -4,33 +4,33 @@ namespace Alura.LeilaoOnline.Selenium.PageObjects
 {
     public class LoginPageObject
     {
-        private IWebDriver driver;
+        private IWebDriver _driver;
         private readonly By byInputLogin;
         private readonly By byInputPassword;
-        private readonly By byBtnLogin;
+        private readonly By byButtonLogin;
 
         public LoginPageObject(IWebDriver driver)
         {
-            this.driver = driver;
+            this._driver = driver;
             byInputLogin = By.Id("Login");
             byInputPassword = By.Id("Password");
-            byBtnLogin = By.Id("btnLogin");
+            byButtonLogin = By.Id("btnLogin");
         }
 
-        public void AbrirPaginaLogin()
+        public void AbrirPagina()
         {
-            driver.Navigate().GoToUrl("http://localhost:5000/Autenticacao/Login");
+            _driver.Navigate().GoToUrl("http://localhost:5000/Autenticacao/Login");
         }
 
         public void PreencherFormulario(string login, string password)
         {
-            driver.FindElement(byInputLogin).SendKeys(login);
-            driver.FindElement(byInputPassword).SendKeys(password);
+            _driver.FindElement(byInputLogin).SendKeys(login);
+            _driver.FindElement(byInputPassword).SendKeys(password);
         }
 
         public void SubmeterFormulario()
         {
-            driver.FindElement(byBtnLogin).Submit();
+            _driver.FindElement(byButtonLogin).Submit();
         }
     }
 }

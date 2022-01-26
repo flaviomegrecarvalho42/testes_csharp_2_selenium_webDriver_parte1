@@ -2,6 +2,6 @@
 {
     public interface IModalidadeAvaliacao
     {
-        Lance Avalia(Leilao leilao);
+        Lance Avaliar(Leilao leilao);
     }
 }

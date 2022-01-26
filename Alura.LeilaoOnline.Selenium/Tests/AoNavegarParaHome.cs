@@ -5,55 +5,65 @@ using Xunit;
 namespace Alura.LeilaoOnline.Selenium.Tests
 {
     [Collection("Chrome Driver")]
-    public class AoNavegarParaHome 
+    public class AoNavegarParaHome
     {
-        private IWebDriver driver;
+        private IWebDriver _driver;
 
         //Arrange - Abrir o navegador (Setup)
         public AoNavegarParaHome(TestFixture fixture)
         {
-            driver = fixture.Driver;
+            _driver = fixture.Driver;
         }
 
         [Fact]
         public void DadoChromeAbertoDeveMostrarLeiloesNoTitulo()
         {
-            //arrange
+            #region Arrange
+            #endregion 
 
-            //act
-            driver.Navigate().GoToUrl("http://localhost:5000");
+            #region Act
+            _driver.Navigate().GoToUrl("http://localhost:5000");
+            #endregion
 
-            //assert
-            Assert.Contains("Leilões", driver.Title);
+            #region Assert
+            Assert.Contains("Leilões", _driver.Title);
+            #endregion
         }
 
         [Fact]
         public void DadoChromeAbertoDeveMostrarProximosLeiloesNaPagina()
         {
-            //arrange
+            #region Arrange
+            #endregion
 
-            //act
-            driver.Navigate().GoToUrl("http://localhost:5000");
+            #region Act
+            _driver.Navigate().GoToUrl("http://localhost:5000");
+            #endregion
 
-            //assert
-            Assert.Contains("Próximos Leilões", driver.PageSource);
+            #region Assert
+            Assert.Contains("Próximos Leilões", _driver.PageSource);
+            #endregion
         }
 
         [Fact]
         public void DadoChromeAbertoFormRegistroNaoDeveMostrarMensagensDeErro()
         {
-            //arrange
+            #region Arrange
+            #endregion
 
-            //act
-            driver.Navigate().GoToUrl("http://localhost:5000");
+            #region Act
+            _driver.Navigate().GoToUrl("http://localhost:5000");
+            #endregion
 
-            //assert
-            var form = driver.FindElement(By.TagName("form"));
+            #region Assert
+            var form = _driver.FindElement(By.TagName("form"));
             var spans = form.FindElements(By.TagName("span"));
+
             foreach (var span in spans)
             {
                 Assert.True(string.IsNullOrEmpty(span.Text));
             }
+            #endregion
         }
     }
 }

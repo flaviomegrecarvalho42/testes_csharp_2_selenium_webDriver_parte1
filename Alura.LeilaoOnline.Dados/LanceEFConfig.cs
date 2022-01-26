@@ -9,9 +9,10 @@ namespace Alura.LeilaoOnline.WebApp.Dados
         public void Configure(EntityTypeBuilder<Lance> builder)
         {
             builder.HasOne<Leilao>(lance => lance.Leilao)
-                .WithMany(leilao => leilao.Lances);
+                   .WithMany(leilao => leilao.Lances);
+
             builder.HasOne<Interessada>(lance => lance.Cliente)
-                .WithMany(i => i.Lances);
+                   .WithMany(i => i.Lances);
         }
     }
 }

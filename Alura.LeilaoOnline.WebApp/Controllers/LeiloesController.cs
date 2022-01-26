@@ -14,35 +14,21 @@ namespace Alura.LeilaoOnline.WebApp.Controllers
     [AutorizacaoFilterAttribute]
     public class LeiloesController : Controller
     {
-        private readonly IRepositorio<Leilao> _repo;
-        private readonly IHostingEnvironment _env;
-
-        private string TentaGravarImagemDestaqueERetornaSeuNome(IFormFile upload)
-        {
-            if (upload != null)
-            {
-                var nomeArquivoServidor = Path.Combine(_env.WebRootPath,
-                                                       "images",
-                                                       upload.FileName);
-
-                using (var stream = new FileStream(nomeArquivoServidor, FileMode.OpenOrCreate))
-                {
-                    upload.CopyTo(stream);
-                }
-            }
-
-            return $"/images/{upload.FileName}";
-        }
+        private readonly IRepositorio<Leilao> _repositorio;
+        private readonly IHostingEnvironment _hostingEnviroment;
 
         public LeiloesController(IRepositorio<Leilao> repositorio, IHostingEnvironment environment)
         {
-            _repo = repositorio;
-            _env = environment;
+            _repositorio = repositorio;
+            _hostingEnviroment = environment;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(Paginacao paginacao)
         {
-            var leiloes = _repo.Todos.Select(l => l.ToViewModel());
+            var leiloes = _repositorio.Todos
+                                      .Select(l => l.ToLeilaoViewModel())
+                                      .ToListaPaginada(paginacao);
+
             return View(leiloes);
         }
 
@@ -55,43 +41,50 @@ namespace Alura.LeilaoOnline.WebApp.Controllers
         [HttpPost]
         public IActionResult Novo(LeilaoViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                //gravar arquivo com a imagem definida
-                model.Imagem = this.TentaGravarImagemDestaqueERetornaSeuNome(model.ArquivoImagem);
-
-                var novoLeilao = model.ToModel();
-                _repo.Incluir(novoLeilao);
-
-                return RedirectToAction("Index");
+                return View("Novo", model);
             }
 
-            return View("Novo", model);
+            //gravar arquivo com a imagem definida
+            model.Imagem = this.TentarGravarImagemDestaqueERetornarSeuNome(model.ArquivoImagem);
+            var novoLeilao = model.ToLeilaoModel();
+
+            _repositorio.Incluir(novoLeilao);
+
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
-        public IActionResult Remove(int id)
+        public IActionResult Remover(int id)
         {
             //var leilao = _repo.BuscarPorId(id);
             var leilao = new LeilaoViewModel();
 
-            if(leilao != null)
+            if(leilao == null)
             {
-                //_repo.Excluir(leilao);
-                return RedirectToAction("Index");
+                return NotFound();
             }
 
-            return NotFound();
+            //_repo.Excluir(leilao);
+            return RedirectToAction("Index");
         }
 
-        //[HttpGet]
-        //public IActionResult Visualiza(int id)
-        //{
-        //    var leilao = _repo.BuscarPorId(id);
-        //    if(leilao != null) {
-        //      return View(leilao);
-        //    }
-        //    return NotFound();
-        //}
+        private string TentarGravarImagemDestaqueERetornarSeuNome(IFormFile upload)
+        {
+            if (upload != null)
+            {
+                var nomeArquivoServidor = Path.Combine(_hostingEnviroment.WebRootPath,
+                                                       "images",
+                                                       upload.FileName);
+
+                using (var stream = new FileStream(nomeArquivoServidor, FileMode.OpenOrCreate))
+                {
+                    upload.CopyTo(stream);
+                }
+            }
+
+            return $"/images/{upload.FileName}";
+        }
     }
 }

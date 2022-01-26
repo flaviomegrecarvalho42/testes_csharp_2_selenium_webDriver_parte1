@@ -7,26 +7,31 @@ namespace Alura.LeilaoOnline.WebApp.Controllers
 {
     public class UsuariosController : Controller
     {
-        private readonly IRepositorio<Usuario> _repo;
+        private readonly IRepositorio<Usuario> _repositorio;
 
         public UsuariosController(IRepositorio<Usuario> repositorio)
         {
-            _repo = repositorio;
+            _repositorio = repositorio;
         }
 
         [HttpPost]
-        public IActionResult Registro(RegistroViewModel model)
+        public IActionResult Registrar(RegistroViewModel registroViewModel)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                //registrar usuário/interessado
-                var usuario = new Usuario { Email = model.Email, Senha = model.Password, Interessada = new Interessada(model.Nome) };
-
-                _repo.Incluir(usuario);
-                return RedirectToAction("Agradecimento");
+                return BadRequest();
             }
 
-            return BadRequest();
+            //registrar usuário/interessado
+            var usuario = new Usuario
+            {
+                Email = registroViewModel.Email,
+                Senha = registroViewModel.Password,
+                Interessada = new Interessada(registroViewModel.Nome)
+            };
+
+            _repositorio.Incluir(usuario);
+            return RedirectToAction("Agradecimento");
         }
 
         [HttpGet]

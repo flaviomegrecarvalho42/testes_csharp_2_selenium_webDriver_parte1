@@ -1,4 +1,4 @@
-﻿function seguirLeilao(dados, onsucess, onerror) {
+﻿﻿function seguirLeilao(dados, onsucess, onerror) {
     $.post(
         '/Interessadas/SeguirLeilao',
         dados,

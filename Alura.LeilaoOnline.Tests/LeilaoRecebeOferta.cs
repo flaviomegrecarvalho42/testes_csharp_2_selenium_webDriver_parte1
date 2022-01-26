@@ -10,56 +10,62 @@ namespace Alura.LeilaoOnline.Tests
         [Fact]
         public void NaoAceitaProximoLanceDadoMesmoClienteRealizouUltimoLance()
         {
-            //Arranje - cenário
+            #region Arrange
             var modalidade = new MaiorValor();
             var leilao = new Leilao("Van Gogh", modalidade);
             var fulano = new Interessada("Fulano");
-            leilao.IniciaPregao();
-            leilao.RecebeLance(fulano, 800);
-            
-            //Act - método sob teste
-            leilao.RecebeLance(fulano, 1000);
+            leilao.IniciarPregao();
+            leilao.ReceberLance(fulano, 800);
+            #endregion
 
-            //Assert
+            #region Act
+            leilao.ReceberLance(fulano, 1000);
+            #endregion
+
+            #region Assert
             var qtdeEsperada = 1;
             var qtdeObtida = leilao.Lances.Count();
             Assert.Equal(qtdeEsperada, qtdeObtida);
+            #endregion
         }
 
         [Theory]
         [InlineData(4, new double[] { 1000, 1200, 1400, 1300 })]
         [InlineData(2, new double[] { 800, 900 })]
-        public void NaoPermiteNovosLancesDadoLeilaoFinalizado(int qtdeEsperada, double[] ofertas)
+        public void NaoPermiteNovosLancesDadoLeilaoFinalizado(int qtdeEsperada, double[] lances)
         {
-            //Arranje - cenário
+            #region Arrange
             var modalidade = new MaiorValor();
             var leilao = new Leilao("Van Gogh", modalidade);
             var fulano = new Interessada("Fulano");
             var maria = new Interessada("Maria");
-            leilao.IniciaPregao();
+            leilao.IniciarPregao();
 
-            for (int i = 0; i < ofertas.Length; i++)
+            for (int i = 0; i < lances.Length; i++)
             {
-                var valor = ofertas[i];
+                var valor = lances[i];
 
                 if ((i%2)==0)
                 {
-                    leilao.RecebeLance(fulano, valor);
+                    leilao.ReceberLance(fulano, valor);
                 }
                 else
                 {
-                    leilao.RecebeLance(maria, valor);
+                    leilao.ReceberLance(maria, valor);
                 }
             }
 
-            leilao.TerminaPregao();
+            leilao.TerminarPregao();
+            #endregion
 
-            //Act - método sob teste
-            leilao.RecebeLance(fulano, 1000);
+            #region Act
+            leilao.ReceberLance(fulano, 1000);
+            #endregion
 
-            //Assert
+            #region Assert
             var qtdeObtida = leilao.Lances.Count();
             Assert.Equal(qtdeEsperada, qtdeObtida);
+            #endregion
         }
     }
 }

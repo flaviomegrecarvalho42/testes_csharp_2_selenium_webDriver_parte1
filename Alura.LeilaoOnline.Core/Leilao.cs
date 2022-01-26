@@ -35,13 +35,31 @@ namespace Alura.LeilaoOnline.Core
         private Interessada _ultimoCliente;
         private IModalidadeAvaliacao _avaliador;
 
+        public Leilao(string titulo, IModalidadeAvaliacao avaliador)
+        {
+            Titulo = titulo;
+            Lances = new List<Lance>();
+            Estado = EstadoLeilao.LeilaoAntesDoPregao;
+            _avaliador = avaliador;
+        }
+
+        //para uso do EF Core
+        private Leilao()
+        {
+
+        }
+
         public int Id { get; set; }
+
         [Required]
         public string Titulo { get; set; }
+
         [Required]
         public string Descricao { get; set; }
+
         [Required]
         public string Categoria { get; set; }
+
         [Required]
         public string Imagem { get; set; }
         public double ValorInicial { get; set; }
@@ -51,27 +69,9 @@ namespace Alura.LeilaoOnline.Core
         public IList<Lance> Lances { get; private set; }
         public IList<Favorito> Seguidores { get; private set; }
         public Lance Ganhador { get; private set; }
+        public double ValorDoLanceAtual => Lances.Select(l => l.Valor).LastOrDefault();
 
-        //para uso do EF Core
-        private Leilao()
-        {
-
-        }
-
-        public Leilao(string titulo, IModalidadeAvaliacao avaliador)
-        {
-            Titulo = titulo;
-            Lances = new List<Lance>();
-            Estado = EstadoLeilao.LeilaoAntesDoPregao;
-            _avaliador = avaliador;
-        }
-
-        private bool NovoLanceEhAceito(Interessada cliente, double valor)
-        {
-            return (Estado == EstadoLeilao.LeilaoEmAndamento) && (cliente != _ultimoCliente);
-        }
-
-        public void RecebeLance(Interessada cliente, double valor)
+        public void ReceberLance(Interessada cliente, double valor)
         {
             if (NovoLanceEhAceito(cliente, valor))
             {
@@ -80,22 +80,25 @@ namespace Alura.LeilaoOnline.Core
             }
         }
 
-        public void IniciaPregao()
+        public void IniciarPregao()
         {
             Estado = EstadoLeilao.LeilaoEmAndamento;
         }
 
-        public void TerminaPregao()
+        public void TerminarPregao()
         {
             if (Estado != EstadoLeilao.LeilaoEmAndamento)
             {
-                throw new System.InvalidOperationException("Não é possível terminar o pregão sem que ele tenha começado. Para isso, utilize o método IniciaPregao().");
+                throw new InvalidOperationException("Não é possível terminar o pregão sem que ele tenha começado. Para isso, utilize o método IniciaPregao().");
             }
 
-            Ganhador = _avaliador.Avalia(this);
+            Ganhador = _avaliador.Avaliar(this);
             Estado = EstadoLeilao.LeilaoFinalizado;
         }
 
-        public double ValorDoLanceAtual => Lances.Select(l => l.Valor).LastOrDefault();
+        private bool NovoLanceEhAceito(Interessada cliente, double valor)
+        {
+            return (Estado == EstadoLeilao.LeilaoEmAndamento) && (cliente != _ultimoCliente);
+        }
     }
 }

@@ -23,7 +23,6 @@ namespace Alura.LeilaoOnline.WebApp.Dados
             modelBuilder.ApplyConfiguration<Interessada>(new InteressadaEFConfig());
             modelBuilder.ApplyConfiguration<Usuario>(new UsuarioEFConfig());
             modelBuilder.ApplyConfiguration<Favorito>(new FavoritoEFConfig());
-
         }
     }
 }

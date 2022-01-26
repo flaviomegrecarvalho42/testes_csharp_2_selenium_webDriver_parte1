@@ -5,7 +5,7 @@ namespace Alura.LeilaoOnline.WebApp.Extensions
 {
     public static class LeilaoExtensions
     {
-        public static LeilaoViewModel ToViewModel(this Leilao leilao)
+        public static LeilaoViewModel ToLeilaoViewModel(this Leilao leilao)
         {
             return new LeilaoViewModel
             {
@@ -22,7 +22,7 @@ namespace Alura.LeilaoOnline.WebApp.Extensions
             };
         }
 
-        public static Leilao ToModel(this LeilaoViewModel leilao)
+        public static Leilao ToLeilaoModel(this LeilaoViewModel leilao)
         {
             return new Leilao(leilao.Titulo, null)
             {

@@ -6,6 +6,7 @@ namespace Alura.LeilaoOnline.Core
     public class Interessada
     {
         public int Id { get; set; }
+
         [Required]
         public string Nome { get; private set; }
         public IEnumerable<Lance> Lances { get; set; }

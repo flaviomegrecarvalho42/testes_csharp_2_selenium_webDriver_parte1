@@ -9,52 +9,50 @@ namespace Alura.LeilaoOnline.Selenium.Tests
     [Collection("Chrome Driver")]
     public class AoEfetuarLogin
     {
-        private IWebDriver driver;
+        private IWebDriver _driver;
 
         public AoEfetuarLogin(TestFixture fixture)
         {
-            driver = fixture.Driver;
+            _driver = fixture.Driver;
         }
 
         [Fact]
         public void DadoCredenciaisValidasDeveIrParaPaginaDashboard()
         {
-            #region Arrange - Dado navegador aberto, página inicial do sistema de leilões
-            //dados de registro válidos informados
-            LoginPageObject loginPageObject = new LoginPageObject(driver);
+            #region Arrange
+            LoginPageObject loginPageObject = new LoginPageObject(_driver);
 
-            loginPageObject.AbrirPaginaLogin();
-            loginPageObject.PreencherFormulario(login: "flavio.megre@gmail.com", password: "123");
+            loginPageObject.AbrirPagina();
+            loginPageObject.PreencherFormulario(login: "fulano@example.org", password: "123");
             #endregion
 
-            #region Act - Ao efetuar o registro
+            #region Act
             loginPageObject.SubmeterFormulario();
             Thread.Sleep(1000);
             #endregion
 
-            #region Assert - Devo ser direcionado para uma página de agradecimento
-            Assert.Contains("Dashboard", driver.Title);
+            #region Assert
+            Assert.Contains("Dashboard", _driver.Title);
             #endregion
         }
 
         [Fact]
         public void DadoCredenciaisInValidasDeveContinuarNaPaginaDeLogin()
         {
-            #region Arrange - Dado navegador aberto, página inicial do sistema de leilões
-            //dados de registro válidos informados
-            LoginPageObject loginPageObject = new LoginPageObject(driver);
+            #region Arrange
+            LoginPageObject loginPageObject = new LoginPageObject(_driver);
 
-            loginPageObject.AbrirPaginaLogin();
-            loginPageObject.PreencherFormulario(login: "flavio.megre@gmail.com", password: "");
+            loginPageObject.AbrirPagina();
+            loginPageObject.PreencherFormulario(login: "fulano@example.org", password: "");
             #endregion
 
-            #region Act - Ao efetuar o registro
+            #region Act
             loginPageObject.SubmeterFormulario();
             Thread.Sleep(1000);
             #endregion
 
-            #region Assert - Devo ser direcionado para uma página de agradecimento
-            Assert.Contains("Login", driver.PageSource);
+            #region Assert
+            Assert.Contains("Login", _driver.PageSource);
             #endregion
         }
     }

@@ -9,15 +9,16 @@ namespace Alura.LeilaoOnline.Tests
         [Fact]
         public void LancaArgumentExceptionDadoValorNegativo()
         {
-            //Arranje
+            #region Arrange
             var valorNegativo = -100;
+            #endregion
 
-            //Assert
+            #region Arrange
             Assert.Throws<System.ArgumentException>(
                 //Act
                 () => new Lance(null, valorNegativo)
             );
+            #endregion
         }
-
     }
 }

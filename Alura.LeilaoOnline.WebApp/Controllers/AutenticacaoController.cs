@@ -10,11 +10,11 @@ namespace Alura.LeilaoOnline.WebApp.Controllers
 {
     public class AutenticacaoController : Controller
     {
-        private readonly IRepositorio<Usuario> _repo;
+        private readonly IRepositorio<Usuario> _repositorio;
 
         public AutenticacaoController(IRepositorio<Usuario> repositorio)
         {
-            _repo = repositorio;
+            _repositorio = repositorio;
         }
 
         [HttpGet]
@@ -28,13 +28,20 @@ namespace Alura.LeilaoOnline.WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var usuario = _repo.Todos.FirstOrDefault(u => u.Email == model.Login && u.Senha == model.Password);
+                var usuario = _repositorio.Todos.FirstOrDefault(u => u.Email == model.Login &&
+                                                                     u.Senha == model.Password);
 
                 if (usuario != null)
                 {
-                    usuario = _repo.BuscarPorId(usuario.Id);
+                    usuario = _repositorio.BuscarPorId(usuario.Id);
+
                     //autenticar
                     HttpContext.Session.Set<Usuario>("usuarioLogado", usuario);
+
+                    if (usuario.Interessada == null)
+                    {
+                        return RedirectToAction("Index", "Leiloes");
+                    }
 
                     return RedirectToAction("Index", "Interessadas");
                 }

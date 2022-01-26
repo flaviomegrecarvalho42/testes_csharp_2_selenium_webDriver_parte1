@@ -10,8 +10,9 @@ namespace Alura.LeilaoOnline.WebApp.Dados
         public void Configure(EntityTypeBuilder<Leilao> builder)
         {
             builder.HasOne<Lance>(l => l.Ganhador);
+
             builder.Property<EstadoLeilao>(l => l.Estado)
-                .HasConversion(e => e.ToString(), e => Enum.Parse<EstadoLeilao>(e));
+                   .HasConversion(e => e.ToString(), e => Enum.Parse<EstadoLeilao>(e));
         }
     }
 }
